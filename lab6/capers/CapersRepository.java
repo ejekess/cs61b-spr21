@@ -1,5 +1,7 @@
 package capers;
 
+import com.sun.security.jgss.GSSUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -37,13 +39,31 @@ public class CapersRepository {
     public static void setupPersistence() {
         // TODO
         if(!CAPERS_FOLDER.exists()) {
-            File file=new File(CAPERS_FOLDER.getPath());
-            File file1= new File(CAPERS_FOLDER.getPath() + "\\story.txt");
+            try {
+                System.out.println(CAPERS_FOLDER.getPath());
+                CAPERS_FOLDER.createNewFile();
+                File file1= new File(CAPERS_FOLDER.getPath() + "/story.txt");
+                if(!file1.exists())
+                {
+
+                    file1.createNewFile();
+
+                }
+                System.out.println(file1.exists());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
 
 
         }
         if(!Dog.DOG_FOLDER.exists()) {
-            File file2 = new File(Dog.DOG_FOLDER.getPath());
+            try {
+                System.out.println(Dog.DOG_FOLDER.getPath());
+                Dog.DOG_FOLDER.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -55,7 +75,6 @@ public class CapersRepository {
     public static void writeStory(String text) {
         // TODO
         File story=new File(CAPERS_FOLDER.getPath()+"\\story.txt");
-        System.out.println(story.getPath());
         Utils.writeContents(story,text);
         System.out.println(readContentsAsString(story));
     }
@@ -69,6 +88,7 @@ public class CapersRepository {
         Dog dog=new Dog(name, breed, age);
         System.out.println(dog);
         dog.saveDog();
+
     }
 
     /**
