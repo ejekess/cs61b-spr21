@@ -1,6 +1,7 @@
 package capers;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static capers.Utils.*;
@@ -35,7 +36,15 @@ public class CapersRepository {
      */
     public static void setupPersistence() {
         // TODO
-        Utils.join(CAPERS_FOLDER,"story.txt");
+        if(!CAPERS_FOLDER.exists()) {
+            File file=new File(CAPERS_FOLDER.getPath());
+            File file1= new File(CAPERS_FOLDER.getPath() + "\\story.txt");
+
+
+        }
+        if(!Dog.DOG_FOLDER.exists()) {
+            File file2 = new File(Dog.DOG_FOLDER.getPath());
+        }
     }
 
     /**
@@ -46,6 +55,7 @@ public class CapersRepository {
     public static void writeStory(String text) {
         // TODO
         File story=new File(CAPERS_FOLDER.getPath()+"\\story.txt");
+        System.out.println(story.getPath());
         Utils.writeContents(story,text);
         System.out.println(readContentsAsString(story));
     }
