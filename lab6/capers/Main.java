@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import static capers.Utils.*;
-import static com.sun.tools.javac.jvm.PoolConstant.LoadableConstant.Int;
 
 /** Canine Capers: A Gitlet Prelude.
  * @author TODO
