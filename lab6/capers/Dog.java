@@ -41,7 +41,10 @@ public class Dog implements  Serializable{ // TODO
      */
     public static Dog fromFile(String name) {
         // TODO (hint: look at the Utils file)
-        return null;
+        File file=new File((Dog.DOG_FOLDER).getPath()+"\\"+name+".txt");
+        System.out.println(file.getPath());
+        System.out.println(file.exists());
+        return (Dog) Utils.readObject(file, Dog.class);
     }
 
     /**

@@ -95,9 +95,7 @@ public class CapersRepository {
      */
     public static void celebrateBirthday(String name) {
         // TODO
-        File file=new File((Dog.DOG_FOLDER).getPath()+"\\"+name+".txt");
-        Dog dog= Utils.readObject(file,Dog.class);
-        System.out.println(dog);
-        System.out.println("Happy birthday! Woof! Woof!");
+       Dog dog=Dog.fromFile(name);
+       dog.haveBirthday();
     }
 }

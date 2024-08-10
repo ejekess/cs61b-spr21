@@ -57,10 +57,11 @@ class Utils {
 
                 } else {
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
+                    String newLine = System.getProperty("line.separator");
+                    str.write(newLine.getBytes());
                 }
             }
-            String newLine = System.getProperty("line.separator");
-            str.write(newLine.getBytes());
+
             str.close();
         } catch (IOException | ClassCastException excp) {
             throw new IllegalArgumentException(excp.getMessage());
@@ -74,6 +75,7 @@ class Utils {
         try {
             ObjectInputStream in =
                     new ObjectInputStream(new FileInputStream(file));
+
             T result = expectedClass.cast(in.readObject());
             in.close();
             return result;
