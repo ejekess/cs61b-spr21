@@ -40,7 +40,7 @@ public class CapersRepository {
         // TODO
         if(!CAPERS_FOLDER.exists()) {
             try {
-                System.out.println(CAPERS_FOLDER.getPath());
+                //System.out.println(CAPERS_FOLDER.getPath());
                 CAPERS_FOLDER.mkdir();
                 File file1= new File(CAPERS_FOLDER.getPath() + "\\story.txt");
                 if(!file1.exists())
@@ -49,7 +49,7 @@ public class CapersRepository {
                     file1.createNewFile();
 
                 }
-                System.out.println(file1.exists());
+               // System.out.println(file1.exists());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -58,7 +58,6 @@ public class CapersRepository {
 
         }
         if(!Dog.DOG_FOLDER.exists()) {
-           // System.out.println(Dog.DOG_FOLDER.getPath());
             Dog.DOG_FOLDER.mkdir();
         }
     }

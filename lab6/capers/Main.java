@@ -39,11 +39,10 @@ public class Main {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
-            //Utils.exitWithError("Must have at least one argument");
+            Utils.exitWithError("Must have at least one argument");
         }
         CapersRepository.setupPersistence();
         String text;
-      //  CapersRepository.celebrateBirthday("Scruffy");
         switch (args[0]) {
         case "story":
             /* This call has been handled for you. The rest will be similar. */
