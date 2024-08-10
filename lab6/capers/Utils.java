@@ -54,7 +54,7 @@ class Utils {
             for (Object obj : contents) {
                 if (obj instanceof byte[]) {
                     str.write((byte[]) obj);
-                    str.write("\n".getBytes(StandardCharsets.UTF_8));
+                    str.write('\n');
                 } else {
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
                 }
