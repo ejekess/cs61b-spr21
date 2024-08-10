@@ -78,7 +78,7 @@ class Utils {
             ObjectInputStream in =
                     new ObjectInputStream(new FileInputStream(file));
             Object t=in.readObject();
-            System.out.println("Deserialized object type: " + t.getClass().getName());
+            //System.out.println("Deserialized object type: " + t.getClass().getName());
             T result = expectedClass.cast(t);
 
             in.close();
