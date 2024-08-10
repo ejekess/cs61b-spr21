@@ -54,11 +54,13 @@ class Utils {
             for (Object obj : contents) {
                 if (obj instanceof byte[]) {
                     str.write((byte[]) obj);
-                    str.write('\n');
+
                 } else {
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
                 }
             }
+            String newLine = System.getProperty("line.separator");
+            str.write(newLine.getBytes());
             str.close();
         } catch (IOException | ClassCastException excp) {
             throw new IllegalArgumentException(excp.getMessage());
