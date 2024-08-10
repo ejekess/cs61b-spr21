@@ -1,14 +1,6 @@
 package capers;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
@@ -58,10 +50,11 @@ class Utils {
                         new IllegalArgumentException("cannot overwrite directory");
             }
             BufferedOutputStream str =
-                    new BufferedOutputStream(Files.newOutputStream(file.toPath()));
+                    new BufferedOutputStream(new FileOutputStream(file,true));
             for (Object obj : contents) {
                 if (obj instanceof byte[]) {
                     str.write((byte[]) obj);
+                    str.write("\n".getBytes(StandardCharsets.UTF_8));
                 } else {
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
                 }

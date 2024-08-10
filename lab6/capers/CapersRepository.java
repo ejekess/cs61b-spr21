@@ -41,8 +41,8 @@ public class CapersRepository {
         if(!CAPERS_FOLDER.exists()) {
             try {
                 System.out.println(CAPERS_FOLDER.getPath());
-                CAPERS_FOLDER.createNewFile();
-                File file1= new File(CAPERS_FOLDER.getPath() + "/story.txt");
+                CAPERS_FOLDER.mkdir();
+                File file1= new File(CAPERS_FOLDER.getPath() + "\\story.txt");
                 if(!file1.exists())
                 {
 
@@ -58,12 +58,8 @@ public class CapersRepository {
 
         }
         if(!Dog.DOG_FOLDER.exists()) {
-            try {
-                System.out.println(Dog.DOG_FOLDER.getPath());
-                Dog.DOG_FOLDER.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+           // System.out.println(Dog.DOG_FOLDER.getPath());
+            Dog.DOG_FOLDER.mkdir();
         }
     }
 
