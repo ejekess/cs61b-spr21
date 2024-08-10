@@ -52,6 +52,7 @@ public class Dog implements  Serializable{ // TODO
         age += 1;
         System.out.println(toString());
         System.out.println("Happy birthday! Woof! Woof!");
+        saveDog();
     }
 
     /**

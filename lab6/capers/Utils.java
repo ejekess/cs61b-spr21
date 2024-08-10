@@ -49,13 +49,15 @@ class Utils {
                 throw
                         new IllegalArgumentException("cannot overwrite directory");
             }
-            BufferedOutputStream str =
-                    new BufferedOutputStream(new FileOutputStream(file,true));
+            BufferedOutputStream str =null;
+
             for (Object obj : contents) {
                 if (obj instanceof byte[]) {
+                   str =new BufferedOutputStream(new FileOutputStream(file));
                     str.write((byte[]) obj);
 
                 } else {
+                    str=new BufferedOutputStream(new FileOutputStream(file,true));
                     str.write(((String) obj).getBytes(StandardCharsets.UTF_8));
                     String newLine = System.getProperty("line.separator");
                     str.write(newLine.getBytes());
@@ -75,7 +77,9 @@ class Utils {
         try {
             ObjectInputStream in =
                     new ObjectInputStream(new FileInputStream(file));
-            T result = expectedClass.cast(in.readObject());
+            Object t=in.readObject();
+            System.out.println("Deserialized object type: " + t.getClass().getName());
+            T result = expectedClass.cast(t);
 
             in.close();
             return result;
