@@ -84,7 +84,7 @@ public class Repository {
               GITLET_DIR.mkdir();
 
               Commit Initial=new Commit("initial commit",null);
-
+              Initial.commitIn();
 
 
               //TODO:make the relevant folder
@@ -94,7 +94,7 @@ public class Repository {
 
               /**store initial branch path**/
 
-              System.out.println(BRANCH_USED);
+              //System.out.println(BRANCH_USED);
               Utils.writeContents(HEAD_FILE,BRANCH_USED);
 
 
@@ -121,7 +121,6 @@ public class Repository {
               file3.mkdir();
               Blob.BLOB_DIR.mkdir();
               Commit.COMMIT_DIR.mkdir();
-              Initial.commitIn();
           }
           else
           {
