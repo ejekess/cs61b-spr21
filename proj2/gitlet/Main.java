@@ -15,20 +15,17 @@ public class Main {
             System.out.println("Please enter a command.");
         }
         String firstArg = args[0];
-
-
-     // Repository.InitRepository();
+       //Repository.InitRepository();
        //Repository.Commit("Hello");
         /**
          * If a user inputs a command with the wrong number or format of operands,
          * print the message and exit.Incorrect operands.
          */
     switch(firstArg) {
-        case "init":
+            case "init":
                 // TODO: handle the `init` command
                 validateNumArgs("init",args,1);
                 Repository.InitRepository();
-
                 break;
             case "add":
 
