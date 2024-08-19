@@ -84,12 +84,19 @@ public class Repository {
               GITLET_DIR.mkdir();
 
               Commit Initial=new Commit("initial commit",null);
-              Initial.commitIn();
+
 
 
               //TODO:make the relevant folder
 
               REFS_DIR.mkdir();
+
+
+              Stage.Stage_DIR.mkdir();
+              File file3=join(GITLET_DIR,"Objects");
+              file3.mkdir();
+              Blob.BLOB_DIR.mkdir();
+              Commit.COMMIT_DIR.mkdir();
 
 
               /**store initial branch path**/
@@ -101,7 +108,7 @@ public class Repository {
               //write the initial branch to file
               BRANCHS_DIR.mkdir();
               File file2=new File(BRANCH_USED);
-
+              Initial.commitIn();
               HEAD=Initial.getUID();
               System.out.println(HEAD);
               try {
@@ -115,12 +122,7 @@ public class Repository {
 
 
 
-              Stage.Stage_DIR.mkdir();
 
-              File file3=join(GITLET_DIR,"Objects");
-              file3.mkdir();
-              Blob.BLOB_DIR.mkdir();
-              Commit.COMMIT_DIR.mkdir();
           }
           else
           {
