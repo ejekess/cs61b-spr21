@@ -46,7 +46,7 @@ public class Stage implements Dumpable{
         try {
             file1.createNewFile();
         } catch (IOException e) {
-            Utils.error("can't overwrite stage.class","add")
+            Utils.error("can't overwrite stage.class","add");
         }
         Utils.writeObject(file1,this);
     }
