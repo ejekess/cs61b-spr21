@@ -69,7 +69,7 @@ public class Repository {
 
 
     /**  mark the path the branch now tracked**/
-    public  static String BRANCH_USED=BRANCHS_DIR.getPath()+"/master";;
+    public  static String BRANCH_USED=BRANCHS_DIR.getPath()+"\\master";;
 
     public static String HEAD;
 
@@ -103,6 +103,7 @@ public class Repository {
               File file2=new File(BRANCH_USED);
 
               HEAD=Initial.getUID();
+              System.out.println(HEAD);
               try {
                   file2.createNewFile();
                   HEAD_FILE.createNewFile();
