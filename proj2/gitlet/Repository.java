@@ -2,6 +2,7 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -82,6 +83,7 @@ public class Repository {
         {
             BRANCH_USED=Utils.readContentsAsString(HEAD_FILE);
             HEADSHA1=Utils.readContentsAsString(new File(BRANCH_USED));
+            //System.out.println(HEADSHA1);
         }
 
         else
@@ -208,9 +210,8 @@ public class Repository {
         commitIn(NewCommit);
         
         Utils.writeContents(new File(BRANCH_USED),NewCommit.getUID());
-        if(!Utils.restrictedDelete(join(Stage.Stage_DIR,"Stage.txt")))
-        {
-            System.out.println("can't clear StageArea.");
+        for (File listFile : Stage.Stage_DIR.listFiles()) {
+            listFile.delete();
         }
         
     }
@@ -218,7 +219,10 @@ public class Repository {
 
     public  static Commit getHEADCommit()
     {
+
         String CommitID = Repository.HEADSHA1;
+        //System.out.println(BRANCH_USED);
+        //System.out.println(HEADSHA1);
         File CommitTracked = Utils.join(Commit.COMMIT_DIR, (CommitID + ".txt"));
         //System.out.println(CommitTracked.getPath());
         if (!CommitTracked.exists()) {

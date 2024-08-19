@@ -48,18 +48,13 @@ public class Commit  implements Dumpable {
         }
         else
         {
-            // 获取当前时间
+            //get current time
             Date date = new Date();
 
-            // 创建Formatter对象
+
             StringBuilder sb = new StringBuilder();
             Formatter formatter = new Formatter(sb, Locale.CHINA);
 
-            // 格式化日期
-            // 注意：%tB 输出完整月份名称，%tb 输出缩写月份名称
-            // %tA 输出完整星期名称，%ta 输出缩写星期名称
-            // %td 表示一个月中的某天（01-31），%tH（00-23），%tM（00-59），%tS（00-61），%tY（年份）
-            // %tz 表示时区
             formatter.format("%ta %tb %td %tH:%tM:%tS %tY  %tz", date, date, date, date, date, date,date,date);
 
             timestamp=sb.toString();
