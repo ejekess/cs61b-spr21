@@ -10,21 +10,21 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO: what if args is empty?
-       /* if(args.length==0)
+       if(args.length==0)
         {
             System.out.println("Please enter a command.");
-        }*/
-       // String firstArg = args[0];
+        }
+        String firstArg = args[0];
 
 
-      Repository.InitRepository();
-       Repository.Commit("Hello");
+     // Repository.InitRepository();
+       //Repository.Commit("Hello");
         /**
          * If a user inputs a command with the wrong number or format of operands,
          * print the message and exit.Incorrect operands.
          */
-    /*   switch(firstArg) {
-            case "init":
+    switch(firstArg) {
+        case "init":
                 // TODO: handle the `init` command
                 validateNumArgs("init",args,1);
                 Repository.InitRepository();
@@ -61,7 +61,7 @@ public class Main {
 
             default:
                 System.out.println("No command with that name exists.");
-        }*/
+        }
     }
 
 
