@@ -1,5 +1,7 @@
 package gitlet;
 
+import java.util.Arrays;
+
 /** Driver class for Gitlet, a subset of the Git version-control system.
  *  @author TODO
  */
@@ -34,9 +36,16 @@ public class Main {
                 break;
 
             case "commit":
+
                 validateNumArgs("add",args,2);
                 Repository.Commit(args[1]);
                 break;
+
+            case "log":
+               validateNumArgs("log",args,1);
+               Repository.Log();
+               break;
+
 
             case "status":
 
@@ -44,12 +53,11 @@ public class Main {
                 break;
 
 
-            case "log":
-                break;
+
 
 
             case "rm":
-
+                Repository.remove(args[1]);
                 break;
 
 
@@ -62,6 +70,10 @@ public class Main {
 
     public static void validateNumArgs(String cmd, String[] args, int n) {
 
+        if(cmd.equals("commit")&&args.length<2)
+        {
+           throw Utils.error("Please enter a commit message.",cmd);
+        }
         if (args.length != n) {
             throw Utils.error("Incorrect operands.", cmd);
         }

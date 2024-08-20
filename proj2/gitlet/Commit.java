@@ -80,14 +80,15 @@ public class Commit  implements Dumpable {
         BlobsUID=new ArrayList<>();
         File file;
         for (Blob blob : stage.getBlobs()) {
-            BlobsUID.add(blob.getBlobUID());
-
-            file=Utils.join(Blob.BLOB_DIR,(blob.getBlobUID()+".txt"));
-            try {
-                file.createNewFile();
-                Utils.writeObject(file,blob);
-            } catch (IOException e) {
-                throw Utils.error("Can't save Blobs","commit");
+            if(blob.getBlobStatus()!=Blob.STATUS_REMOVE) {
+                BlobsUID.add(blob.getBlobUID());
+                file = Utils.join(Blob.BLOB_DIR, (blob.getBlobUID() + ".txt"));
+                try {
+                    file.createNewFile();
+                    Utils.writeObject(file, blob);
+                } catch (IOException e) {
+                    throw Utils.error("Can't save Blobs", "commit");
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -232,6 +233,123 @@ public class Repository {
 
         Commit head = Utils.readObject(CommitTracked, Commit.class);
         return head;
+    }
+
+    public static void remove(String fileName) {
+        if (!GITLET_DIR.exists()) {
+            System.out.println("Not in an initialized Gitlet directory.");
+            return;
+        }
+        boolean flag1=true,flag2=true;
+        Stage stage;
+        Commit commit=getHEADCommit();
+        File StageArea=join(Stage.Stage_DIR,"Stage.class");
+        if(StageArea.exists()) {
+             stage = Utils.readObject(StageArea, Stage.class);
+                File file = join(Repository.CWD, fileName);
+                if (!file.exists()) {
+                    System.out.println("File does not exist.");
+                }
+                Blob fileblob=BlobLauncher.forStageADD(file);
+                flag1=remove(stage,fileName,commit,fileblob);
+                writeObject(StageArea,stage);
+        }
+        else//file not in   addition StageArea
+        {
+                stage=new Stage();
+                File file = join(Repository.CWD, fileName);
+                if (!file.exists()) {
+                    System.out.println("File does not exist.");
+                }
+                Blob fileblob=BlobLauncher.forStageADD(file);
+                flag2=RemoveFromCommit(commit,fileblob,stage);
+                writeObject(StageArea,stage);
+        }
+       if(flag1==false&&flag2==false) {
+           throw Utils.error("No reason to remove the file.", "rm");
+        }
+    }
+
+    private static  boolean remove(Stage stage, String s,Commit commit,Blob fileblob) {
+            List<Blob> blobs=stage.getBlobs();
+
+            if(blobs!=null)
+            {
+                //Unstage the file if it is currently staged for addition.
+                Iterator<Blob> iterator = blobs.iterator();
+                while(iterator.hasNext()){
+                    Blob temp = iterator.next();
+                    if(temp.getBlobUID().equals(fileblob.getBlobUID())){
+                        if(temp.getBlobStatus()==Blob.STATUS_ADD)
+                        {
+                            iterator.remove();
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+            //file not in  addition StageArea
+            else
+            {
+               return  RemoveFromCommit(commit,fileblob,stage);
+            }
+    }
+
+    /**
+     *If file to be removed not in StagedArea,then conclude
+     *  if the file is tracked in the current commit, stage it for removal and
+     *  remove the file from the working directory if the user
+     *  has not already done so
+     */
+    public  static  boolean RemoveFromCommit(Commit commit,Blob fileblob,Stage stage)
+    {
+
+        if(commit.getBlobsUID()!=null)
+        {
+            Iterator<String> iterator = commit.getBlobsUID().iterator();
+            while(iterator.hasNext()) {
+                String next = iterator.next();
+
+                /**delete Blobs file and version in head commit**/
+                if (fileblob.getBlobUID().equals(next)) {
+                    File file1=join(Blob.BLOB_DIR,(fileblob.getBlobUID()+".txt"));
+                    Blob Rmblob=Utils.readObject(file1,Blob.class);
+                    file1.delete();
+                    Rmblob.setBlobStatus(Blob.STATUS_REMOVE);
+                    stage.add(Rmblob);
+                    iterator.remove();
+                    return true;
+                }
+            }
+        }
+        return  false;
+    }
+
+    /**
+     *
+     *  following the first parent commit links,
+     *  ignoring any second parents found in merge commits.
+     *
+     */
+
+    //TODO:now ignore the branch commit and merge commits
+    public static void Log() {
+           Commit HeadCommit=getHEADCommit();
+        File file;
+        //TODO :Commit dumb method
+        System.out.println("===");
+        System.out.println(HeadCommit.getUID());
+        System.out.println(HeadCommit.getTimestamp());
+        System.out.println(HeadCommit.getMessage());
+        for (String s : HeadCommit.getParentUID()) {
+            file=Utils.join(Commit.COMMIT_DIR,(s+".txt"));
+            Commit commit=Utils.readObject(file,Commit.class);
+            System.out.println("===");
+            System.out.println(HeadCommit.getUID());
+            System.out.println(HeadCommit.getTimestamp());
+            System.out.println(HeadCommit.getMessage());
+        }
     }
 }
 
