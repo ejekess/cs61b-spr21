@@ -73,13 +73,12 @@ public class Main {
                     if (args.length == 2) {
                         Repository.CheckOut3(args[1]);
                     }
-                    else if(args[1].equals("--"))
-                    {
-                        Repository.CheckOut1(args[2]);
-                    }
-                    else if(args[2].equals("--"))
-                    {
-                        Repository.CheckOut2(args[1],args[3]);
+                    else {
+                        if (args[1].equals("--")) {
+                            Repository.CheckOut1(args[2]);
+                        } else if (args[2].equals("--")) {
+                            Repository.CheckOut2(args[1], args[3]);
+                        }
                     }
                     break;
 
