@@ -64,8 +64,8 @@ public class Main {
 
 
 
-
                 case "checkout":
+
                     if(args.length==1)
                     {
                         throw Utils.error("Incorrect operands.","checkout");

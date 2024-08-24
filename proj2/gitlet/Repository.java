@@ -325,19 +325,14 @@ public class Repository {
         }
            Commit HeadCommit=getHEADCommit();
         File file;
-        //TODO :Commit dumb method
-        System.out.println("===");
-        System.out.println(HeadCommit.getUID());
-        System.out.println(HeadCommit.getTimestamp());
-        System.out.println(HeadCommit.getMessage());
 
+        System.out.println("===");
+        HeadCommit.dump();
         for (String s : HeadCommit.getParentUID()) {
             file=Utils.join(Commit.COMMIT_DIR,(s+".txt"));
             Commit commit=Utils.readObject(file,Commit.class);
             System.out.println("===");
-            System.out.println(commit.getUID());
-            System.out.println(commit.getTimestamp());
-            System.out.println(commit.getMessage());
+            commit.dump();
         }
     }
 

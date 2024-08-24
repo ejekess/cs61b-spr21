@@ -104,6 +104,8 @@ public class Commit  implements Dumpable {
 
     @Override
     public void dump() {
-        return;
+        System.out.println(UID);
+        System.out.println(timestamp);
+        System.out.println(message);
     }
 }
