@@ -40,11 +40,12 @@ public class Commit  implements Dumpable {
 
     /* TODO: fill in the rest of this class. */
 
-    public Commit(String message, List<String> parentUID) {
+    public Commit(String message, List<String> ParentUID) {
         this.message = message;
-        if(parentUID==null)
+        if(ParentUID==null)
         {
             timestamp="Thu Jan 1 00:00:00 1970 -0800";
+            this.parentUID=new ArrayList<>();
         }
         else
         {
@@ -58,8 +59,9 @@ public class Commit  implements Dumpable {
             formatter.format("%ta %tb %td %tH:%tM:%tS %tY  %tz", date, date, date, date, date, date,date,date);
 
             timestamp=sb.toString();
+            this.parentUID=ParentUID;
         }
-        this.parentUID=parentUID;
+
     }
 
     public String getMessage() {

@@ -57,11 +57,7 @@ public class Blob implements  Dumpable{
         return content;
     }
 
-
-
-
-
-
-
-
+    public String getBlobName() {
+        return BlobName;
+    }
 }

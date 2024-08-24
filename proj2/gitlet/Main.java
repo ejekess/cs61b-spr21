@@ -61,6 +61,34 @@ public class Main {
                 break;
 
 
+
+
+
+
+                case "checkout":
+                    if(args.length==1)
+                    {
+                        throw Utils.error("Incorrect operands.","checkout");
+                    }
+                    if (args.length == 2) {
+                        Repository.CheckOut3(args[1]);
+                    }
+                    else if(args[1].equals("--"))
+                    {
+                        Repository.CheckOut1(args[2]);
+                    }
+                    else if(args[2].equals("--"))
+                    {
+                        Repository.CheckOut2(args[1],args[3]);
+                    }
+                    break;
+
+
+                    case  "branch":
+                        validateNumArgs(args[0],args,2);
+                     Repository.NewBranch(args[1]);
+
+                    break;
             default:
                 System.out.println("No command with that name exists.");
         }
@@ -70,10 +98,12 @@ public class Main {
 
     public static void validateNumArgs(String cmd, String[] args, int n) {
 
+
         if(cmd.equals("commit")&&args.length<2)
         {
            throw Utils.error("Please enter a commit message.",cmd);
         }
+
         if (args.length != n) {
             throw Utils.error("Incorrect operands.", cmd);
         }

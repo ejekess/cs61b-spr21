@@ -2,10 +2,7 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import static gitlet.Utils.*;
@@ -84,7 +81,6 @@ public class Repository {
         {
             BRANCH_USED=Utils.readContentsAsString(HEAD_FILE);
             HEADSHA1=Utils.readContentsAsString(new File(BRANCH_USED));
-            //System.out.println(HEADSHA1);
         }
 
         else
@@ -194,27 +190,18 @@ public class Repository {
    }
         Stage stage=Utils.readObject(file,Stage.class);
 
-
-
         Commit headCommit=getHEADCommit();
         List<String> ParentUID=headCommit.parentUID;
-        if(ParentUID!=null) {
-            ParentUID.add(headCommit.getUID());
-        }
-        else
-        {
-            ParentUID=new ArrayList<>();
-            ParentUID.add(headCommit.getUID());
-        }
-        Commit NewCommit=new Commit(message,ParentUID);
-        NewCommit.setBlobsUID(stage);
-        commitIn(NewCommit);
+        ParentUID.add(headCommit.getUID());
+        Commit NextCommit=new Commit(message,ParentUID);
+        NextCommit.setBlobsUID(stage);
+        commitIn(NextCommit);
+        HEADSHA1=NextCommit.getUID();
         
-        Utils.writeContents(new File(BRANCH_USED),NewCommit.getUID());
+        Utils.writeContents(new File(BRANCH_USED),NextCommit.getUID());
         for (File listFile : Stage.Stage_DIR.listFiles()) {
             listFile.delete();
         }
-        
     }
 
 
@@ -222,10 +209,7 @@ public class Repository {
     {
 
         String CommitID = Repository.HEADSHA1;
-        //System.out.println(BRANCH_USED);
-        //System.out.println(HEADSHA1);
         File CommitTracked = Utils.join(Commit.COMMIT_DIR, (CommitID + ".txt"));
-        //System.out.println(CommitTracked.getPath());
         if (!CommitTracked.exists()) {
             System.out.println("can't find head commit file.");
             return null;
@@ -335,6 +319,10 @@ public class Repository {
 
     //TODO:now ignore the branch commit and merge commits
     public static void Log() {
+        if (!GITLET_DIR.exists()) {
+            System.out.println("Not in an initialized Gitlet directory.");
+            return;
+        }
            Commit HeadCommit=getHEADCommit();
         File file;
         //TODO :Commit dumb method
@@ -342,15 +330,137 @@ public class Repository {
         System.out.println(HeadCommit.getUID());
         System.out.println(HeadCommit.getTimestamp());
         System.out.println(HeadCommit.getMessage());
+
         for (String s : HeadCommit.getParentUID()) {
             file=Utils.join(Commit.COMMIT_DIR,(s+".txt"));
             Commit commit=Utils.readObject(file,Commit.class);
             System.out.println("===");
-            System.out.println(HeadCommit.getUID());
-            System.out.println(HeadCommit.getTimestamp());
-            System.out.println(HeadCommit.getMessage());
+            System.out.println(commit.getUID());
+            System.out.println(commit.getTimestamp());
+            System.out.println(commit.getMessage());
         }
     }
+
+
+    /**
+     * the method to find Blob of File in Blobs
+     * @param arg
+     * @param Blobs
+     */
+
+    public static void CheckoutFile(String arg,   List<String> Blobs)
+    {
+
+        if(Blobs==null)
+        {
+            System.out.println("File does not exist in that commit.");
+            return;
+        }
+        File file;
+        Blob tempblob;
+        for (String blobID : Blobs) {
+            file=join(Blob.BLOB_DIR,blobID+".txt");
+            if(file.exists())
+            {
+                tempblob=Utils.readObject(file,Blob.class);
+                if(tempblob.getBlobName().equals(arg))
+                {
+                    File targetFile=join(CWD,arg);
+                    if(targetFile.exists()) {
+                        if (targetFile.isDirectory()) {
+                            throw Utils.error("can't checkout a directory", "checkout --");
+                        }
+                        else {
+                            writeContents(targetFile, tempblob.getContent());
+                        }
+                    }
+                    else
+                    {
+                        try {
+                            targetFile.createNewFile();
+                            writeContents(targetFile, tempblob.getContent());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+        System.out.println("File does not exist in that commit.");
+    }
+
+    /**
+     * Takes the version of the file as it exists in the head commit and puts it
+     * in the working directory, overwriting the version of the file
+     * that’s already there if there is one.
+     * The new version of the file is not staged.
+     * @param arg
+     */
+    public static void CheckOut1(String arg) {
+       Commit headCommit=getHEADCommit();
+       List<String> Blobs=headCommit.getBlobsUID();
+       CheckoutFile(arg,Blobs);
+    }
+
+
+    /**
+     * Takes the version of the file as it exists in the commit with the given id,
+     * and puts it in the working directory,
+     * overwriting the version of the file that’s already there if there is one.
+     * The new version of the file is not staged.
+     */
+    public static void CheckOut2(String commitID,String fileName) {
+        File  TargetCommitFile=Utils.join(Commit.COMMIT_DIR,commitID+".txt");
+        if(!TargetCommitFile.exists())
+        {
+            System.out.println("No commit with that id exists.");
+            return;
+        }
+        Commit TargetCommit=Utils.readObject(TargetCommitFile,Commit.class);
+        List<String> BlobsID=TargetCommit.getBlobsUID();
+        CheckoutFile(fileName,BlobsID);
+    }
+
+    public static void CheckOut3(String BranchName) {
+        if (!GITLET_DIR.exists()) {
+            System.out.println("Not in an initialized Gitlet directory.");
+            return;
+        }
+        File file=join(BRANCHS_DIR,BranchName);
+        if(!file.exists())
+        {
+            System.out.println("No such branch exists.");
+            return;
+        }
+
+
+        BRANCH_USED=file.getPath();
+        Utils.writeContents(HEAD_FILE,BRANCH_USED);
+        HEADSHA1=Utils.readContentsAsString(file);
+    }
+
+    public static void NewBranch(String BranchName) {
+        File AllBranch=join(BRANCHS_DIR,BranchName);
+        if(AllBranch.exists())
+        {
+            System.out.println("A branch with that name already exists.");
+            return;
+        }
+
+        try {
+            AllBranch.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Commit HeadCommit=getHEADCommit();
+        String BranchSha1=HeadCommit.getUID();
+        Utils.writeContents(AllBranch,BranchSha1);
+
+    }
+
+
+
 }
 
 
