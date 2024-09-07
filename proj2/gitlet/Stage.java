@@ -2,8 +2,10 @@ package gitlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Stage implements Dumpable{
     @Override
@@ -12,18 +14,18 @@ public class Stage implements Dumpable{
     }
     public static final File Stage_DIR=Utils.join(Repository.GITLET_DIR,"\\StageArea");
 
-    private List<Blob> blobs;
+    private Map<String,String> blobsMap;
 
-    public List<Blob> getBlobs() {
-        return blobs;
+    public Map<String,String> getBlobsMap() {
+        return blobsMap;
     }
     public Stage()
     {
-      blobs=new LinkedList<>();
+      blobsMap=new HashMap<>();
     }
-   public void add(Blob blob)
+   public void add(String file,String blob)
    {
-       blobs.add(blob);
+       blobsMap.put(file,blob);
    }
 
 

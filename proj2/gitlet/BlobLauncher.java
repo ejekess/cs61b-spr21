@@ -4,14 +4,17 @@ import java.io.File;
 
 public class BlobLauncher {
 
-    public static Blob forStageADD(File file)
+    public static Blob FiletoBlob(File file)
     {
         Blob blob=new Blob();
         blob.setContent(Utils.readContents(file));
+        blob.setBlobName(file.getPath());
         blob.setBlobUID(Utils.sha1(Utils.serialize(blob)));
-        blob.setBlobName(file.getName());
-        blob.setBlobStatus(Blob.STATUS_ADD);
         return blob;
     }
+
+
+
+
 
 }

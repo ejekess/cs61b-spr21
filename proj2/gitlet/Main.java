@@ -10,11 +10,14 @@ public class Main {
     /** Usage: java gitlet.Main ARGS, where ARGS contains
      *  <COMMAND> <OPERAND1> <OPERAND2> ... 
      */
+
     public static void main(String[] args) {
         // TODO: what if args is empty?
+
     if(args.length==0)
         {
             System.out.println("Please enter a command.");
+            return;
         }
         String firstArg = args[0];
 	//Repository.add("Hello.txt");
@@ -48,7 +51,8 @@ public class Main {
 
 
             case "status":
-
+                validateNumArgs(args[0],args,1);
+                Repository.getStatus();
 
                 break;
 
@@ -60,9 +64,16 @@ public class Main {
                 Repository.remove(args[1]);
                 break;
 
+            case  "reset":
+                validateNumArgs(args[0],args,2);
+                Repository.reset(args[1]);
+                break;
 
 
-
+            case "rm-branch":
+                validateNumArgs(args[0],args,2);
+                Repository.removeBranch(args[1]);
+                break;
 
                 case "checkout":
 
@@ -79,6 +90,10 @@ public class Main {
                         } else if (args[2].equals("--")) {
                             Repository.CheckOut2(args[1], args[3]);
                         }
+                        else
+                        {
+                            throw Utils.error("Incorrect operands.", "checkout");
+                        }
                     }
                     break;
 
@@ -86,8 +101,11 @@ public class Main {
                     case  "branch":
                         validateNumArgs(args[0],args,2);
                      Repository.NewBranch(args[1]);
-
                     break;
+
+                    case "merge":
+                        validateNumArgs(args[0],args,2);
+                        Repository.Merge(args[1]);
             default:
                 System.out.println("No command with that name exists.");
         }

@@ -22,8 +22,6 @@ public class Commit  implements Dumpable {
      */
 
     /** The message of this Commit. */
-
-    public static final File COMMIT_DIR=Utils.join(Repository.GITLET_DIR,"\\Objects\\Commits");
     private String message;
     private String timestamp;//format:Thu Nov 9 17:01:33 2017 -0800
 
@@ -31,17 +29,18 @@ public class Commit  implements Dumpable {
 
     String UID;
 
-    public List<String> getBlobsUID() {
-        return BlobsUID;
+    public Map<String,String> getBlobsMap() {
+        return BlobsMap;
     }
 
     List<String> parentUID;//the most last commit,use the file name
-     List<String> BlobsUID;
+     Map<String ,String> BlobsMap;
 
     /* TODO: fill in the rest of this class. */
 
     public Commit(String message, List<String> ParentUID) {
         this.message = message;
+        BlobsMap=new HashMap<>();
         if(ParentUID==null)
         {
             timestamp="Thu Jan 1 00:00:00 1970 -0800";
@@ -78,22 +77,30 @@ public class Commit  implements Dumpable {
         return parentUID;
     }
 
-    public void setBlobsUID(Stage stage) {
-        BlobsUID=new ArrayList<>();
-        File file;
-        for (Blob blob : stage.getBlobs()) {
-            if(blob.getBlobStatus()!=Blob.STATUS_REMOVE) {
-                BlobsUID.add(blob.getBlobUID());
-                file = Utils.join(Blob.BLOB_DIR, (blob.getBlobUID() + ".txt"));
-                try {
-                    file.createNewFile();
-                    Utils.writeObject(file, blob);
-                } catch (IOException e) {
-                    throw Utils.error("Can't save Blobs", "commit");
-                }
-            }
-        }
-    }
+//    public void addBlobsFile(Stage stage) {
+//        BlobsUID=new ArrayList<>();
+//        File prexFile,CommitFile;
+//        String prefix,other;
+//        for (Blob blob : stage.getBlobs()) {
+//            if(blob.getBlobStatus()!=Blob.STATUS_REMOVE) {
+//                BlobsUID.add(blob.getBlobUID());
+//                prefix=blob.getBlobUID().substring(0,2);
+//                other=blob.getBlobUID().substring(2);
+//                prexFile = Utils.join(Repository.OBJECT_DIR, prefix);
+//                CommitFile=Utils.join(prexFile,other);
+//                if(!prexFile.exists())
+//                {
+//                 prexFile.mkdir();
+//                }
+//                try {
+//                    CommitFile.createNewFile();
+//                    Utils.writeObject(CommitFile, blob);
+//                } catch (IOException e) {
+//                    throw Utils.error("Can't save Blobs", "commit");
+//                }
+//            }
+//        }
+//    }
 
 
 

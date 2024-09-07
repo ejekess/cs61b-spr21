@@ -3,16 +3,12 @@ package gitlet;
 import java.io.File;
 
 public class Blob implements  Dumpable{
-    public static final File BLOB_DIR=Utils.join(Repository.GITLET_DIR,"\\Objects\\Blobs");
-
-
-
-
-
+    public static final int STATUS_COMMIT=0;
     public static final int STATUS_ADD=1;
     public static final int STATUS_REMOVE=2;
 
     public static final int STATUS_MODIFY=3;
+
 
     @Override
     public void dump() {
@@ -25,7 +21,7 @@ public class Blob implements  Dumpable{
 
     /** to avoid files which has different name and the same content
      * to have the same sha1UID**/
-    private String BlobName;
+    private String BlobPath;
     private int  BlobStatus;
     private byte[] content;
 
@@ -34,7 +30,7 @@ public class Blob implements  Dumpable{
     }
 
     public void setBlobName(String blobName) {
-        BlobName = blobName;
+        BlobPath = blobName;
     }
 
     public void setBlobStatus(int blobStatus) {
@@ -57,7 +53,7 @@ public class Blob implements  Dumpable{
         return content;
     }
 
-    public String getBlobName() {
-        return BlobName;
+    public String getBlobPath() {
+        return BlobPath;
     }
 }

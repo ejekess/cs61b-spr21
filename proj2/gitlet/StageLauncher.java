@@ -4,26 +4,33 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static gitlet.Utils.join;
+
 public class StageLauncher {
-    public static void add(Blob blob) {
+    public static void add(Blob blob,String fileName) {
         /**If the current working version of the file is identical to the version in the current commit,
          *do not stage it to be added, and remove it from the staging area
          *if it is already there
          *(as can happen when a file is changed, added,
          * and then changed back to its original version).**/
-       Commit head=Repository.getHEADCommit();
-        List<String> blobs1 = head.getBlobsUID();
-
-        if (blobs1 != null) {
-            for (int i = 0; i < blobs1.size(); i++) {
-                if (blobs1.get(i).equals(blob.getBlobUID())) {
-                    return;
-                }
-            }
+        String prefix= blob.getBlobUID().substring(0,2);
+        String other=blob.getBlobUID().substring(2);
+        File preDir=join(Repository.OBJECT_DIR,prefix);
+        File BlobFile=join(preDir,other);
+        if(preDir.exists()&&BlobFile.exists())
+            return;
+        if(!preDir.exists())
+        {
+            preDir.mkdir();
+        }
+        try {
+            BlobFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         Stage stage;
-        File file1 = new File(Stage.Stage_DIR + "\\Stage.txt");
+        File file1 = join(Stage.Stage_DIR , "Stage.txt");
         if (file1.exists()) {
             stage = Utils.readObject(file1, Stage.class);
         }
@@ -35,23 +42,9 @@ public class StageLauncher {
                 Utils.error("can't overwrite stage.class", "add");
             }
         }
-
-
-        for (Blob stageBlob : stage.getBlobs()) {
-            if (stageBlob.getBlobUID().equals(blob.getBlobUID())) {
-              //  System.out.println("this file has no change!");
-                return;
-            }
-        }
-
-        stage.add(blob);
+        stage.add(fileName,blob.getBlobUID());
         Utils.writeObject(file1,stage);
-    }
-
-
-
-    public void addFile(List<Blob> blobs){
-
+        Utils.writeObject(BlobFile,blob);
     }
 
 
