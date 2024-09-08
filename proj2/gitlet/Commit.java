@@ -52,7 +52,7 @@ public class Commit  implements Dumpable {
 
 
             StringBuilder sb = new StringBuilder();
-            Formatter formatter = new Formatter(sb, Locale.CHINA);
+            Formatter formatter = new Formatter(sb, Locale.US);
 
             formatter.format("%ta %tb %td %tH:%tM:%tS %tY  %tz", date, date, date, date, date, date,date,date);
 
