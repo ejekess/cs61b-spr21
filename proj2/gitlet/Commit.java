@@ -42,7 +42,7 @@ public class Commit  implements Dumpable {
         BlobsMap=new HashMap<>();
         if(ParentUID==null)
         {
-            timestamp="Thu Jan 1 00:00:00 1970 -0800";
+            timestamp="Thu Jan 01 00:00:00 1970 +0000";
             this.parentUID=new ArrayList<>();
         }
         else
