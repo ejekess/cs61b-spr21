@@ -271,12 +271,6 @@ public class Repository {
         }
 
         Blob fileblob = BlobLauncher.FiletoBlob(file);
-
-
-        String prefix = fileblob.getBlobUID().substring(0, 2);
-        String other = fileblob.getBlobUID().substring(2);
-        File preDir = Utils.join(Repository.OBJECT_DIR, prefix);
-        File BlobFile = Utils.join(preDir, other);
         stage = Utils.readObject(StageArea, Stage.class);
 
 
@@ -324,6 +318,7 @@ public class Repository {
             System.out.println("===");
             commit.dump();
         }
+
     }
 
 
@@ -575,7 +570,7 @@ public class Repository {
             return;
         }
 
-        System.out.println("=== Branches ===\n");
+        System.out.println("=== Branches ===");
         String Branch=join(BRANCH_USED).getName();
         System.out.println("*"+Branch);
         for (File file : BRANCHS_DIR.listFiles()) {
@@ -630,7 +625,7 @@ public class Repository {
                    /**Tracked in the current commit, changed in the working directory, but not staged; or*/
                    if(!prefile.exists()||!Blobfile.exists())
                    {
-                       MnSFile.add(file.getName()+"modified");
+                       MnSFile.add(file.getName()+"(modified)");
                    }
                    headcommit.getBlobsMap().remove(file.getName());
                }
@@ -651,34 +646,41 @@ public class Repository {
             }
         }
 
+        /** Staged for addition, but deleted in the working directory;*/
+        for (String s : stage.getBlobsMap().keySet()) {
+            if(stage.getBlobsMap().get(s).startsWith("rm"))
+            {
+                rmFile.add(s);
+
+                headcommit.getBlobsMap().remove(s);
+            }
+            else
+               MnSFile.add(s+"(deleted)");
+        }
 
         /**Not staged for removal, but tracked in the current commit and deleted from the working directory.*/
         for (String s : headcommit.getBlobsMap().keySet()) {
-                  MnSFile.add(s+"deleted");
-        }
-        /** Staged for addition, but deleted in the working directory;*/
-        for (String s : stage.getBlobsMap().keySet()) {
-            MnSFile.add(s+"deleted");
+                MnSFile.add(s + "(deleted)");
         }
 
         System.out.println();
-        System.out.println("=== Staged Files ===\n");
+        System.out.println("=== Staged Files ===");
             for (String s : addFile) {
                 System.out.println(s);
             }
         System.out.println();
-        System.out.println("=== Removed Files ===\n");
+        System.out.println("=== Removed Files ===");
             for (String s : rmFile) {
                 System.out.println(s);
             }
         System.out.println();
-        System.out.println("=== Modifications Not Staged For Commit ===\n");
+        System.out.println("=== Modifications Not Staged For Commit ===");
         for (String s : MnSFile) {
             System.out.println(s);
         }
 
         System.out.println();
-        System.out.println("=== Untracked Files ===\n");
+        System.out.println("=== Untracked Files ===");
         for (String s : UtFile) {
             System.out.println(s);
         }

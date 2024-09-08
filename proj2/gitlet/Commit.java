@@ -36,7 +36,6 @@ public class Commit  implements Dumpable {
     List<String> parentUID;//the most last commit,use the file name
      Map<String ,String> BlobsMap;
 
-    /* TODO: fill in the rest of this class. */
 
     public Commit(String message, List<String> ParentUID) {
         this.message = message;
@@ -112,7 +111,8 @@ public class Commit  implements Dumpable {
     @Override
     public void dump() {
         System.out.println(UID);
-        System.out.println(timestamp);
+        System.out.println("Date: "+timestamp);
         System.out.println(message);
+        System.out.println();
     }
 }
