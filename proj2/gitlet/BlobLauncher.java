@@ -8,7 +8,7 @@ public class BlobLauncher {
     {
         Blob blob=new Blob();
         blob.setContent(Utils.readContents(file));
-        blob.setBlobName(file.getPath());
+        blob.setBlobName(file.getAbsolutePath());
         blob.setBlobUID(Utils.sha1(Utils.serialize(blob)));
         return blob;
     }

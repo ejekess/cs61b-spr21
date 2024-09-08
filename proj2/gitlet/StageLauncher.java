@@ -31,17 +31,8 @@ public class StageLauncher {
 
         Stage stage;
         File file1 = join(Stage.Stage_DIR , "Stage.txt");
-        if (file1.exists()) {
-            stage = Utils.readObject(file1, Stage.class);
-        }
-        else {
-            stage = new Stage();
-            try {
-                file1.createNewFile();
-            } catch (IOException e) {
-                Utils.error("can't overwrite stage.class", "add");
-            }
-        }
+        stage = Utils.readObject(file1, Stage.class);
+
         stage.add(fileName,blob.getBlobUID());
         Utils.writeObject(file1,stage);
         Utils.writeObject(BlobFile,blob);

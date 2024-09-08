@@ -7,7 +7,6 @@ import java.util.*;
 
 import static gitlet.Utils.*;
 
-// TODO: any imports you need here
 
 /** Represents a gitlet repository.
  *  TODO: It's a good idea to give a description here of what else this Class
@@ -421,7 +420,6 @@ public class Repository {
             {
                 Commit TargetCommit=Utils.readObject(file,Commit.class);
                 Map<String,String> BlobsMap=TargetCommit.getBlobsMap();
-                System.out.println("find the commit");
                 CheckoutFile(fileName,BlobsMap);
                 return;
             }
@@ -632,13 +630,13 @@ public class Repository {
                    /**Tracked in the current commit, changed in the working directory, but not staged; or*/
                    if(!prefile.exists()||!Blobfile.exists())
                    {
-                       MnSFile.add(file.getName());
+                       MnSFile.add(file.getName()+"modified");
                    }
                    headcommit.getBlobsMap().remove(file.getName());
                }
 
                 /**
-                 * The final category (“Untracked Files”) is for files present
+                 * The final category ("Untracked Files") is for files present
                  * in the working directory
                  * but neither staged for addition nor tracked.
                  */
